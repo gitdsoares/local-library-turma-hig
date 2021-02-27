@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
     
+env: 
+  MEU_ARTEFATO: "Artefato"
+    
 jobs:
   build:
     name: Checkout and Upload
@@ -11,14 +14,12 @@ jobs:
 
     steps:
     - name: Checkout
-    - uses: actions/checkout@v2
-      with:
-        name: ${{ secrets.NOME_ARTEFATO }}
-
+      uses: actions/checkout@v2
+   
     - name: Upload
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
-        name: ${{ secrets.NOME_ARTEFATO }}
+        name: ${{ env.MEU_ARTEFATO }}
 
 
 
