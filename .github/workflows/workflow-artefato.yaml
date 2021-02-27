@@ -10,7 +10,7 @@ env:
 jobs:
   build:
     name: Checkout and Upload
-    runs-on: ubunt-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
