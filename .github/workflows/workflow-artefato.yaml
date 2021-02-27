@@ -4,19 +4,22 @@ on:
   push:
     branches: [ main ]
     
-build:
-  name: Checkout and Upload
-  runs-on: ubunt-latest
-  
-  steps:
-  - uses: actions/checkout@v2
-    with:
-      name: ${{ secrets.NOME_ARTEFATO }}
-      
-  - uses: actions/upload-artifact
-    with:
-      name: ${{ secrets.NOME_ARTEFATO }}
+jobs:
+  build:
+    name: Checkout and Upload
+    runs-on: ubunt-latest
 
-    
-  
+    steps:
+    - name: Checkout
+    - uses: actions/checkout@v2
+      with:
+        name: ${{ secrets.NOME_ARTEFATO }}
+
+    - name: Upload
+    - uses: actions/upload-artifact@v2
+      with:
+        name: ${{ secrets.NOME_ARTEFATO }}
+
+
+
 
