@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Imprime hora atual
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  job1:
+    runs-on: ubuntu-latest
+      steps:
+        - name: ubuntu
+          run: |
+              $date = get-date
+              Write-Output $date
+               |          
+      
+  job2:
+    runs-on: windows-latest
+      steps:
+        - name: windows
+          run: |
+                $date = get-date
+                Write-Output $date
+               |
+                    
+  job3:
+    runs-on: macos-latest
+      steps:
+        - name: mac
+          run: |
+                date
+               |
+                    
+  job-4:
+    runs-on: ubuntu-latest
+      steps:
+        - name: ubuntu-4
+          run: |
+              $date = get-date
+              Write-Output $date
+               |   
+         needs: [job-1,job-2,job-3]
+
+ 
