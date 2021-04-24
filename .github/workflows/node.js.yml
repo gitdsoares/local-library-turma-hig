@@ -11,7 +11,7 @@ on:
 
 jobs:
   job1:
-    name: Build and Test
+    name: Job1 - Build and Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,7 +32,7 @@ jobs:
 #job2 - Linter
   
   job2:
-    name: Lint code base
+    name: Job2 - Lint code base
     runs-on: ubuntu-latest
     
     steps:
@@ -54,23 +54,33 @@ jobs:
 #job3 - Sonarcloud
 
   job3:
-    name: Quality Test SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Build and analyze
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          
+    name: Job3 - SonarCloud Quality Tests
+    on:
+      push:
+        branches:
+          - master
+      pull_request:
+        types: [opened, synchronize, reopened]
+    jobs:
+      sonarcloud:
+        name: SonarCloud
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+            with:
+              fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          - name: SonarCloud Scan
+            uses: SonarSource/sonarcloud-github-action@master
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          
   
 #job4 - HOM - Deploy
   
   job4:
+    name: Job4 - Homologação - Deploy
     runs-on: ubuntu-latest
-    needs: [job1, job2]
+    needs: [job1, job2, job3]
     environment:
       name: 'HOM'
 
@@ -102,8 +112,9 @@ jobs:
 #job5 - PROD - Deploy
   
   job5:
+    name: Job5 - Produção - Deploy
     runs-on: ubuntu-latest
-    needs: [job2,job3,job4]
+    needs: [job1,job2,job3,job4]
     environment:
       name: 'PROD'
 
