@@ -7,10 +7,10 @@ on:
   pull_request:
     branches: [ main ]
     
-#STEP1 - Testes unitários
+#job1 - Testes unitários
 
 jobs:
-  STEP1:
+  job1:
     name: Build and Test
     runs-on: ubuntu-latest
 
@@ -29,9 +29,9 @@ jobs:
     - run: npm run build --if-present
     - run: npm test --if-present
 
-#STEP2 - Linter
+#job2 - Linter
   
-  STEP2:
+  job2:
     name: Lint code base
     runs-on: ubuntu-latest
     
@@ -51,9 +51,9 @@ jobs:
           VALIDATE_MARKDOWN: true
           JAVASCRIPT_DEFAULT_STYLE: prettier
 
-#STEP3 - Sonarcloud
+#job3 - Sonarcloud
 
-  STEP3:
+  job3:
     name: Quality Test SonarCloud
     runs-on: ubuntu-latest
     steps:
@@ -66,11 +66,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}          
   
-#STEP4 - HOM - Deploy
+#job4 - HOM - Deploy
   
-  STEP4:
+  job4:
     runs-on: ubuntu-latest
-    needs: [STEP1, STEP2]
+    needs: [job1, job2]
     environment:
       name: 'HOM'
 
@@ -99,11 +99,11 @@ jobs:
       - name: Push code to Heroku
         run: git push heroku main
 
-#STEP5 - PROD - Deploy
+#job5 - PROD - Deploy
   
-  STEP5:
+  job5:
     runs-on: ubuntu-latest
-    needs: [STEP2,STEP3,STEP4]
+    needs: [job2,job3,job4]
     environment:
       name: 'PROD'
 
